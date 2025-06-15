@@ -1,96 +1,103 @@
-const display= document.querySelector(".display");
-const num=document.querySelectorAll(".num");
-const backButton= document.querySelector(".back-button");
-const clearButton= document.querySelector(".clear-button");
-const operator= document.querySelectorAll(".operator-button");
-const equalTo= document.querySelector(".equals-button");
-let currentNumber;
-let finalNumber;
+let final="";
+let current="";
 let previousOperator="";
+const display= document.querySelector(".display");
 
-equalTo.addEventListener('click', ()=>{
-    operation("");
-    display.innerText=finalNumber;
-    finalNumber=0;
-    currentNumber=0;
-});
+function buttonHandler(button){
+    if(isNaN(parseInt(button))){
+        symbolHandler(button);
+    }
+    else{
+        numberHandler(button);
+    }
+}
 
-operator.forEach(button =>{
-   button.addEventListener('click', ()=>{
-    operation(button.innerText);
-   }); 
-});
-
-clearButton.addEventListener('click', ()=> {
-    display.innerText="0";
-    currentNumber="";
-    finalNumber="";
-});
-
-backButton.addEventListener('click', ()=>{
-    removeNumber();
-});
-
-num.forEach(button => {
-    button.addEventListener('click',()=>{
-        appendNumber(button.innerText);
-    })
-});
+function symbolHandler(sign){
+    switch(sign){
+        case 'C':
+            rerender();
+            final="";
+            current="";
+            previousOperator="";
+            break;
+        case '←':
+            string =display.innerText;
+            if(string.length<=1){
+                rerender();
+            }
+            else{
+                display.innerText=string.substring(0,string.length-1);
+            }
+            break;
+        case '÷':
+        case '×':
+        case '+':
+        case '-':
+            current=display.innerText;
+            previousOperator=sign;
+            operation(sign);
+            rerender();
+            break;
+        case '=':
+            current=display.innerText;
+            flushResult();
+            break;
+    }
+}
 
 function operation(sign){
-    currentNumber=+display.innerText;
-    display.innerText="0";
-    if(previousOperator===""){
-        finalNumber=currentNumber;
-        previousOperator=sign;
-    }
-    else if(previousOperator==="+"){
-        finalNumber=add(finalNumber, currentNumber);
-        previousOperator=sign;
-    }
-    else if(previousOperator==="-"){
-        finalNumber=subtract(finalNumber, currentNumber);
-        previousOperator=sign;
-    }
-    else if(previousOperator==="÷"){
-        finalNumber=divide(finalNumber, currentNumber);
-        previousOperator=sign;
-    }
-    else{
-        finalNumber=multiply(finalNumber, currentNumber);
-        previousOperator=sign;
-    }
-}
-function appendNumber(digit){
-    if(digit==="0" && display.innerText==="0"){
+    if(final===""){
+        final=current;
+        current="";
         return;
     }
-    else if(display.innerText==="0"){
-        display.innerText="";
-        display.innerText+=digit;
+    if(sign==='+'){
+        final= (+final) + (+current);
+    }
+    else if(sign==='-'){
+        final= (+final) - (+current);
+    }
+    else if(sign==='×'){
+        final= (+final) * (+current);
+    }
+    else {
+        final= (+final) / (+current);
+    }
+}
+
+function numberHandler(num){
+    if(display.innerText!="0"){
+        display.innerText+=num;
     }
     else{
-        display.innerText+=digit;
+        display.innerText=num;
     }
 }
-function removeNumber(){
-    string = display.innerText;
-    if(string.length===1){
-        display.innerText="0";
+
+function flushResult(){
+    if(previousOperator===""){
+        return;
     }
     else{
-        display.innerText=string.slice(0,-1);
+        operation(previousOperator);
+        display.innerText=final;
+        previousOperator="";
+        final="";
+        current="";
     }
 }
-function add(a,b=0){
-    return (a+b).toFixed(10);
+
+function init(){
+    const numButton = document.querySelectorAll("button");
+    numButton.forEach(button => {
+        button.addEventListener('click', ()=>{
+            buttonHandler(button.innerText);
+        });
+    });
 }
-function multiply(a,b=1){
-    return a*b.toFixed(10);
+
+function rerender(){
+    display.innerText="0";
+
 }
-function divide(a,b=1){
-    return (a/b).toFixed(10);
-}
-function subtract(a,b=0){
-    return (a-b).toFixed(10);
-}
+init();

@@ -1,81 +1,85 @@
 *{
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    
+    box-sizing: border-box;
 }
 
-body, html{
+body,html{
     display: flex;
     flex-direction: column;
     height: 100%;
+    
 }
 
 .body{
-    flex-grow: 1;
-    align-self: center;
-    width: 400px;
     background-color: black;
-    color: white;
-    text-align: center;
-    display: grid;
-    grid-template-rows: repeat(6, 1fr);
-    row-gap: 3px;
+    width: 400px;
+    align-self: center;
+    flex-grow: 1;
 }
 
 .display{
-    color: white;
-    font-size: 40px;
-    padding: 30px 5px;
-    padding-top: 40px;
-    text-align: right;
+    width: 400px;
+    align-self: center;
+    background-color: black;
     font-family: "Courier New", Courier, monospace;
+    display: flex;
+    font-size: 40px;
+    color: white;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 5px;
+    height: 100px;
 }
 
 button{
-    border: black;
     font-size: 40px;
+    border: black;
     background-color: #d8d9db;
 }
 
 button:hover{
-    background-color: white;
+    background-color: #ebeced;
 }
 
 button:active{
-    background-color: #d8d9db;
+    background-color: #a0a1a2;
 }
 
-
-
-.equals-button,.operator-button{
+.operator{
     background-color: #df974c;
     color: white;
 }
 
-.equals-button:hover,.operator-button:hover{
-    background-color: #d2a779
+.operator:hover{
+    background-color: #dda262;
 }
 
-.equals-button:active,.operator-button:active{
-    background-color: #df974c;
+.operator:active{
+    background-color: #e08d34;
+}
+
+.button-pad{
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    row-gap: 3px;
+    height: 100%;
 }
 
 .row-1{
-    flex-grow: 0;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    column-gap: 3px;
+    gap: 3px;
 }
 
 .row-2,.row-3,.row-4{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 3px;
+    gap: 3px;
 }
 
 .row-5{
     display: grid;
     grid-template-columns: 3fr 1fr;
-    column-gap: 3px;
+    gap: 3px;
 }
