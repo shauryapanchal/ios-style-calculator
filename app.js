@@ -1,5 +1,5 @@
-let final="";
-let current="";
+let final=null;
+let current=0;
 let previousOperator="";
 const display= document.querySelector(".display");
 
@@ -33,35 +33,35 @@ function symbolHandler(sign){
         case '×':
         case '+':
         case '-':
-            current=display.innerText;
+            current=+display.innerText;
+            operation(previousOperator);
             previousOperator=sign;
-            operation(sign);
             rerender();
             break;
         case '=':
-            current=display.innerText;
+            current=+display.innerText;
             flushResult();
             break;
     }
 }
 
 function operation(sign){
-    if(final===""){
+    if(final===null || sign===""){
         final=current;
-        current="";
+        current=0;
         return;
     }
     if(sign==='+'){
-        final= (+final) + (+current);
+        final+=current;
     }
     else if(sign==='-'){
-        final= (+final) - (+current);
+        final-=current;
     }
     else if(sign==='×'){
-        final= (+final) * (+current);
+        final*=current;
     }
-    else {
-        final= (+final) / (+current);
+    else if(sign==='÷'){
+        final/=current;
     }
 }
 
@@ -75,16 +75,11 @@ function numberHandler(num){
 }
 
 function flushResult(){
-    if(previousOperator===""){
-        return;
-    }
-    else{
-        operation(previousOperator);
-        display.innerText=final;
-        previousOperator="";
-        final="";
-        current="";
-    }
+    operation(previousOperator);
+    display.innerText=final;
+    previousOperator="";
+    final=0;
+    current=final;
 }
 
 function init(){
